@@ -2,7 +2,7 @@
 
 import {expect} from 'chai'
 import sinon from 'sinon'
-import shimmer from 'shimmer'
+import shimmer from 'trail-shimmer'
 import agent from 'trail-agent'
 import wrapper from '.'
 
@@ -30,6 +30,7 @@ describe('redis wrap', function () {
 
         expect(shimmerWrapStub).to.have.been.calledWith(
             fakeRedis.RedisClient.prototype,
+            'redis.RedisClient.prototype',
             'send_command'
         )
     })
@@ -48,7 +49,7 @@ describe('redis wrap', function () {
         sandbox.stub(agent, 'fork').returns(span)
 
         wrapper.wrap(agent, fakeRedis)
-        let wrapOp = shimmerWrapStub.args[0][2]
+        let wrapOp = shimmerWrapStub.args[0][3]
 
         let fakeRedisClientSend = sandbox.spy((command, args, callback) => {
             callback(new Error('Oops'))

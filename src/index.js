@@ -1,13 +1,11 @@
 'use strict'
 
-import shimmer from 'shimmer'
-let debug = require('debug')('trail')
+import shimmer from 'trail-shimmer'
 
 module.exports = {
     wrap(agent, redis = require('redis')) {
-        this.redis = redis
         // TODO: how to proper indent multiline arguments?
-        shimmer.wrap(this.redis.RedisClient.prototype, 'send_command', function (original) { // eslint-disable-line
+        shimmer.wrap(redis.RedisClient.prototype, 'redis.RedisClient.prototype', 'send_command', function (original) { // eslint-disable-line
             return function (...args) {
                 let command = args[0]
                 let last = args[args.length - 1]
@@ -36,12 +34,10 @@ module.exports = {
                 return original.apply(this, args)
             }
         })
-        debug('Instrumented redis.RedisClient.prototype.send_command')
 
         return redis
     },
     unwrap() {
-        shimmer.unwrap(this.redis.RedisClient.prototype, 'send_command')
-        debug('Removed instrumentation from redis.RedisClient.prototype.send_command') // eslint-disable-line
+        shimmer.unwrapAll()
     },
 }
