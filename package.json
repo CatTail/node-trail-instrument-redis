@@ -1,0 +1,56 @@
+{
+  "name": "trail-instrument-redis",
+  "description": "Instrument redis for trail",
+  "repository": "CatTail/node-trail-instrument-redis",
+  "version": "0.0.0",
+  "main": "dist/index.js",
+  "keywords": [],
+  "files": [
+    "dist"
+  ],
+  "devDependencies": {
+    "babel-cli": "^6.7.7",
+    "babel-eslint": "^6.0.4",
+    "babel-plugin-transform-async-to-generator": "^6.8.0",
+    "babel-plugin-transform-es2015-destructuring": "^6.8.0",
+    "babel-plugin-transform-es2015-modules-commonjs": "^6.8.0",
+    "babel-plugin-transform-es2015-parameters": "^6.8.0",
+    "chai": "^3.5.0",
+    "continuation-local-storage": "^3.1.7",
+    "eslint-plugin-babel": "^3.2.0",
+    "ghooks": "^1.2.1",
+    "istanbul": "^0.4.3",
+    "mocha": "^2.4.5",
+    "redis": "^0.12.1",
+    "sinon": "^1.17.4",
+    "sinon-chai": "^2.8.0",
+    "trail-agent": "^0.2.1"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "debug": "^2.2.0",
+    "shimmer": "^1.1.0"
+  },
+  "scripts": {
+    "prebuild": "rm -rf dist",
+    "build": "babel src -d dist --copy-files",
+    "watch": "babel src -d dist --copy-files -w",
+    "lint": "eslint .",
+    "test": "NODE_ENV=test mocha --reporter spec $npm_package_options_mocha 'dist/**/*.spec.js'",
+    "test-cov": "NODE_ENV=test istanbul cover --report html _mocha -- $npm_package_options_mocha 'dist/**/*.spec.js'",
+    "test-travis": "NODE_ENV=test istanbul cover --report lcovonly _mocha -- $npm_package_options_mocha 'dist/**/*.spec.js'",
+    "prepublish": "npm run build",
+    "np": "resources/np"
+  },
+  "options": {
+    "mocha": "--require ./resources/mocha-bootload --check-leaks --full-trace resources/setup.js"
+  },
+  "config": {
+    "ghooks": {
+      "pre-commit": "npm run build && npm run lint && npm run test-cov"
+    },
+    "commitizen": {
+      "path": "cz-conventional-changelog"
+    }
+  }
+}
