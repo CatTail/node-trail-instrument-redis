@@ -3,7 +3,8 @@
 import shimmer from 'trail-shimmer'
 
 module.exports = {
-    wrap(agent, redis = require('redis')) {
+    target: 'redis',
+    wrap(agent, redis) {
         // TODO: how to proper indent multiline arguments?
         shimmer.wrap(redis.RedisClient.prototype, 'redis.RedisClient.prototype', 'send_command', function (original) { // eslint-disable-line
             return function (...args) {
