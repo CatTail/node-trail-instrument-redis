@@ -1,3 +1,8 @@
+<a name="1.0.1"></a>
+## [1.0.1](https://github.com/open-trail/node-trail-instrument-redis/compare/v1.0.0...v1.0.1) (2016-05-30)
+
+
+
 <a name="1.0.0"></a>
 # [1.0.0](https://github.com/open-trail/node-trail-instrument-redis/compare/v0.1.1...v1.0.0) (2016-05-25)
 
