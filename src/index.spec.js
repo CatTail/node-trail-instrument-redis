@@ -4,6 +4,7 @@ import {expect} from 'chai'
 import sinon from 'sinon'
 import shimmer from 'trail-shimmer'
 import agent from 'trail-agent'
+
 import wrapper from '.'
 
 describe('redis wrap', function () {

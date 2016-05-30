@@ -3,19 +3,21 @@
 import {expect} from 'chai'
 import redis from 'redis'
 import agent from 'trail-agent'
+
 import wrapper from '.'
 
 describe('redis e2e', () => {
     let records
     let redisClient
 
-    beforeEach(() => {
+    beforeEach((done) => {
         records = []
         agent.setRecorder((span) => {
             records.push(span)
         })
         wrapper.wrap(agent, redis)
         redisClient = redis.createClient({no_ready_check: true}) // eslint-disable-line
+        redisClient.on('ready', done)
     })
 
     afterEach(() => {
@@ -24,7 +26,7 @@ describe('redis e2e', () => {
 
     it('should instrument operation test #1', (done) => {
         redisClient.sadd('x', 6, () => {
-            let [, span] = records
+            let [span] = records
             expect(span.operationName).to.eql('sadd')
             done()
         })
@@ -38,8 +40,7 @@ describe('redis e2e', () => {
         }
         Promise.all(tasks)
             .then(() => {
-                // TODO: why send_command receive double requests? All these tests have the same problem
-                expect(records.length).to.eql(index * 2)
+                expect(records.length).to.eql(index)
                 done()
             })
             .catch(done)
@@ -61,7 +62,7 @@ describe('redis e2e', () => {
             .sadd('x', 6)
             .srem('x', 7)
             .exec(() => {
-                expect(records.length).to.eql(4 * 2)
+                expect(records.length).to.eql(4)
                 done()
             })
     })
